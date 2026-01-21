@@ -1,0 +1,277 @@
+{
+  "metadata": {
+    "export_date": "2026-01-20 12:23:40",
+    "total_test_cases": 12,
+    "risk_summary": {
+      "critical": 0,
+      "high": 4,
+      "medium": 5,
+      "low": 3
+    },
+    "priority_summary": {
+      "critical": 3,
+      "high": 5,
+      "medium": 4,
+      "low": 0
+    }
+  },
+  "test_cases": [
+    {
+      "test_id": "TC-008",
+      "title": "Admin Dashboard Access Control (Role-Based)",
+      "description": "Verify role-based access permissions work correctly.",
+      "preconditions": "User accounts with different roles exist",
+      "test_steps": [
+        "Login as CUSTOMER role and try to access /admin/dashboard URL",
+        "Login as VENDOR role and try to access /admin/dashboard",
+        "Login as ADMIN role and access both /admin/dashboard and /vendor/dashboard"
+      ],
+      "expected_result": "Check that API endpoints also enforce same permissions.",
+      "test_type": "Security",
+      "priority": "Critical",
+      "components": [
+        "Authorization",
+        "Admin Dashboard"
+      ],
+      "risk_score": 76.0,
+      "risk_category": "HIGH",
+      "execution_order": 1
+    },
+    {
+      "test_id": "TC-009",
+      "title": "SQL Injection Prevention in Search",
+      "description": "Security testing for SQL injection vulnerabilities in product search.",
+      "preconditions": "User is on the product search page",
+      "test_steps": [
+        "Enter malicious input in search box: ' OR '1'='1",
+        "Enter another malicious input: admin'--",
+        "Enter another malicious input: '; DROP TABLE products;--"
+      ],
+      "expected_result": "System should treat these as literal search strings and NOT execute as SQL commands.",
+      "test_type": "Security Vulnerability Testing",
+      "priority": "Critical",
+      "components": [
+        "Search",
+        "Security"
+      ],
+      "risk_score": 67.0,
+      "risk_category": "HIGH",
+      "execution_order": 2
+    },
+    {
+      "test_id": "TC-004",
+      "title": "Payment Processing - Valid Credit Card",
+      "description": "Test the checkout flow with Stripe test card.",
+      "preconditions": "User logged in, items in cart (total $45.99)",
+      "test_steps": [
+        "Fill billing address",
+        "Select shipping standard ($5.99)",
+        "Click Pay Now"
+      ],
+      "expected_result": "Payment should process in under 3 seconds. User gets confirmation email and order appears in Order History with status 'Processing'. Stripe dashboard should show transaction.",
+      "test_type": "Integration",
+      "priority": "Critical",
+      "components": [
+        "Payment",
+        "Checkout"
+      ],
+      "risk_score": 65.0,
+      "risk_category": "HIGH",
+      "execution_order": 3
+    },
+    {
+      "test_id": "TC-002",
+      "title": "Login Attempt with Invalid Password",
+      "description": "Check system handles wrong password correctly.",
+      "preconditions": "User account exists in the system",
+      "test_steps": [
+        "Navigate to login page",
+        "Enter email: test@shop.com",
+        "Enter wrong password: wrongpass123",
+        "Click Login button"
+      ],
+      "expected_result": "System should show error message 'Invalid credentials' and NOT allow access. Account should not be locked after first failed attempt but track the attempt.",
+      "test_type": "Security",
+      "priority": "High",
+      "components": [
+        "Authentication",
+        "Login"
+      ],
+      "risk_score": 64.0,
+      "risk_category": "HIGH",
+      "execution_order": 4
+    },
+    {
+      "test_id": "TC-001",
+      "title": "User Login with Valid Credentials",
+      "description": "Verify user can login using correct email and password",
+      "preconditions": "User account exists in the system",
+      "test_steps": [
+        "Navigate to login page",
+        "Enter email: testuser@example.com",
+        "Enter password",
+        "Click Login button"
+      ],
+      "expected_result": "User should be redirected to dashboard, welcome message displayed",
+      "test_type": "Functional",
+      "priority": "High",
+      "components": [
+        "Authentication",
+        "Login",
+        "UI"
+      ],
+      "risk_score": 52.33,
+      "risk_category": "MEDIUM",
+      "execution_order": 5
+    },
+    {
+      "test_id": "TC-005",
+      "title": "Payment Failure - Declined Card",
+      "description": "Use Stripe test card (declined card) and check error handling.",
+      "preconditions": "User logged in, items in cart",
+      "test_steps": [
+        "Go through checkout process",
+        "Submit payment with declined card"
+      ],
+      "expected_result": "Payment should be DECLINED. Check error message shows 'Your card was declined'. Cart should still have items, user should be able to try different payment method. No order should be created in database. No confirmation email sent. User account balance unchanged.",
+      "test_type": "Error Handling",
+      "priority": "High",
+      "components": [
+        "Payment",
+        "Checkout"
+      ],
+      "risk_score": 49.0,
+      "risk_category": "MEDIUM",
+      "execution_order": 6
+    },
+    {
+      "test_id": "TC-011",
+      "title": "Error Handling - Network Timeout During Payment",
+      "description": "Simulate network failure during payment processing.",
+      "preconditions": "User is logged in and has items in cart",
+      "test_steps": [
+        "Submit payment",
+        "Simulate network failure"
+      ],
+      "expected_result": "System should show user-friendly error message and NOT charge customer multiple times if they retry.",
+      "test_type": "Error Handling",
+      "priority": "High",
+      "components": [
+        "Payment",
+        "Error Handling"
+      ],
+      "risk_score": 49.0,
+      "risk_category": "MEDIUM",
+      "execution_order": 7
+    },
+    {
+      "test_id": "TC-003",
+      "title": "Password Reset with Email Verification",
+      "description": "User forgot password and needs to reset it.",
+      "preconditions": "User account exists in the system",
+      "test_steps": [
+        "Go to forgot password link",
+        "Enter registered email",
+        "Check that system sends reset email",
+        "Click reset link in email",
+        "Enter new password (min 8 chars with 1 uppercase, 1 number, 1 special char)",
+        "Confirm password matches"
+      ],
+      "expected_result": "User should be able to login with NEW password and OLD password should not work anymore.",
+      "test_type": "Functional",
+      "priority": "Medium",
+      "components": [
+        "Authentication",
+        "Password Reset"
+      ],
+      "risk_score": 45.0,
+      "risk_category": "MEDIUM",
+      "execution_order": 8
+    },
+    {
+      "test_id": "TC-012",
+      "title": "Mobile Responsiveness - Checkout Flow on iPhone",
+      "description": "Test complete checkout on mobile device (iPhone 13, iOS 16, Safari).",
+      "preconditions": "User is on mobile device",
+      "test_steps": [
+        "Browse products",
+        "Add to cart",
+        "View cart",
+        "Enter shipping address",
+        "Enter payment info",
+        "Submit order"
+      ],
+      "expected_result": "All steps should work and UI should be responsive.",
+      "test_type": "UI/UX",
+      "priority": "High",
+      "components": [
+        "Checkout",
+        "Mobile Responsiveness"
+      ],
+      "risk_score": 43.0,
+      "risk_category": "MEDIUM",
+      "execution_order": 9
+    },
+    {
+      "test_id": "TC-006",
+      "title": "Shopping Cart - Add Multiple Items and Update Quantity",
+      "description": "Test adding multiple items and updating quantity in shopping cart.",
+      "preconditions": "Start with empty cart",
+      "test_steps": [
+        "Add product 'Wireless Mouse' (price $29.99) qty 1",
+        "Add 'USB Cable' ($9.99) qty 2",
+        "Update mouse quantity to 3",
+        "Remove USB cable from cart"
+      ],
+      "expected_result": "Cart should show correct total and persist if user logs out and logs back in.",
+      "test_type": "Functional",
+      "priority": "Medium",
+      "components": [
+        "Shopping Cart",
+        "UI"
+      ],
+      "risk_score": 35.0,
+      "risk_category": "LOW",
+      "execution_order": 10
+    },
+    {
+      "test_id": "TC-010",
+      "title": "Performance - Product Listing Page Load Time",
+      "description": "Test page load performance for product catalog.",
+      "preconditions": "User is on the /products page",
+      "test_steps": [
+        "Measure page load time using browser DevTools Network tab",
+        "Test with 3G throttling"
+      ],
+      "expected_result": "Page should load completely in under 2 seconds on good internet connection and be usable in under 5 seconds on 3G.",
+      "test_type": "Performance",
+      "priority": "Medium",
+      "components": [
+        "Performance",
+        "Product Listing"
+      ],
+      "risk_score": 31.0,
+      "risk_category": "LOW",
+      "execution_order": 11
+    },
+    {
+      "test_id": "TC-007",
+      "title": "Checkout with Empty Cart (Edge Case)",
+      "description": "Test edge case where user tries to access checkout URL directly without items in cart.",
+      "preconditions": "User is logged in",
+      "test_steps": [
+        "Navigate to checkout URL directly"
+      ],
+      "expected_result": "System should detect empty cart and redirect to cart page with message 'Your cart is empty. Please add items before checkout.'",
+      "test_type": "Edge Case",
+      "priority": "Medium",
+      "components": [
+        "Checkout",
+        "Shopping Cart"
+      ],
+      "risk_score": 28.0,
+      "risk_category": "LOW",
+      "execution_order": 12
+    }
+  ]
+}

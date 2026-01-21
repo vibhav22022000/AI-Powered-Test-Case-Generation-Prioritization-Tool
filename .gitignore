@@ -1,0 +1,23 @@
+# Environment
+venv/
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+
+# Temp files
+tmpclaude-*
+*.tmp
+
+# Backup folder (don't upload)
+pdf_generators_backup/
+
+# OS
+.DS_Store
+Thumbs.db

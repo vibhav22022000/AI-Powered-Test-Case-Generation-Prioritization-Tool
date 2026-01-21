@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(python -m venv:*)",
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(python src/pdf_generator.py:*)",
+      "Bash(python src/ocr_extractor.py:*)",
+      "Bash(python:*)",
+      "Bash(venvScriptspython.exe src/sample_pdfs_generator.py)",
+      "Bash(\"venv/Scripts/python.exe\" src/sample_pdfs_generator.py)"
+    ]
+  }
+}
